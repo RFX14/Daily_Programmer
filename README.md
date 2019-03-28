@@ -1,5 +1,5 @@
 # Daily_Programmer
-My personal solutions to problems posted to: 
+My personal solutions to problems posted on: 
 
 reddit.com/r/dailyprogrammer
 
