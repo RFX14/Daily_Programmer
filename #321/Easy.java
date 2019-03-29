@@ -1,3 +1,4 @@
+import java.io.SequenceInputStream;
 import java.util.*;
 import javax.sound.sampled.*;
 public class Easy {
@@ -10,7 +11,7 @@ public class Easy {
         int hours = 0, mins = 0, i = 0;
         String time = "", hold = "", pm = "";
 
-        //Seperates the numbers from :
+        //Seperates the numbers from colon
         for(String temp: args[0].split(":")) {
             if(i == 0) {
                 hours += Integer.parseInt(temp);
@@ -51,18 +52,55 @@ public class Easy {
         speak(time);
     }
 
-    //Figure how to put together the audio files
     public static void speak(String text) {
+        ArrayList<String> fileNames = new Arraylist<String>();
+        
+        //Adds filenames to an array so that we can later concat them
+        for(String temp: text.split(" ")) {
+            switch(temp.toLowerCase()) {
+                case "twenty":
+                    fileNames.add("twen");
+                    fileNames.add("ty");
+                case "thirty":
+                    fileNames.add("thir");
+                    fileNames.add("ty");
+                case "forty":
+                    fileNames.add("for");
+                    fileNames.add("ty");
+                case "fifty":
+                    fileNames.add("fif");
+                    fileNames.add("ty");
+                default:
+                    fileNames.add(temp);
+            }
+        }
+
         try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+            File file = new File("/AttAudrey/");
+            AudioInputStream clip1 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(0) + ".wav"));
+            AudioInputStream clip2 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(1) + ".wav"));
+            
+            AudioInputStream multi = 
+                            new AudioInputStream(
+                                new SequenceInputStream(clip1, clip2),
+                                clip1.getFormat(),
+                                clip1.getFrameLength() + clip2.getFrameLength());
+
+            if(fileNames.size() > 2) {
+                for(int i = 0; i < fileNames.size(); i++) {
+                    clip1 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(i) + ".wav"));
+                }
+            }
+            
             Clip clip = AudioSystem.getClip();
-            clip.open(stream);
+            clip.open(multi);
             clip.start();
 
+            //Pauses program to let audio play
             Thread.sleep(500);
             stream.close();
         } catch(Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
