@@ -1,9 +1,16 @@
 import java.io.SequenceInputStream;
+import java.io.*;
 import java.util.*;
 import javax.sound.sampled.*;
 public class Easy {
+
+    //ISSUES:
+    /**
+     * all of the switch cases are not working and just go to default
+     * 8:08 says too much
+     *  *//
     public static void main(String[] args) {
-        String [] tensPlace = {"twenty ", "thirty ", "forty ", "fifty ", "oh " };
+        String [] tensPlace = {"twenty ", "thirty ", "forty ", "fifty ", "oh ", "o'clock " };
         String [] onesPlace = {"one ", "two ", "three ", "four ", "five ", "six ",
                                 "seven ", "eight ", "nine ", "ten ", "eleven ",
                                 "twelve ", "thirteen ", "fourteen ", "fifteen ",
@@ -25,7 +32,7 @@ public class Easy {
          pm = (hours > 12) ? "pm" : "am";
 
         //Hours added to time
-        hold = (hours == 0) ? onesPlace[11] : onesPlace[hours%12 - 1];
+        hold = (hours == 0 || hours == 12) ? onesPlace[11] : onesPlace[hours%12 - 1];
         time += hold;
 
         //oh is added to time or nothing is added
@@ -45,6 +52,8 @@ public class Easy {
 
         if(mins < 20 && mins != 0) {
             time += onesPlace[mins - 1];
+        } else if(mins == 0) {
+            time += tensPlace[5];
         }
 
         time += pm;
@@ -53,11 +62,12 @@ public class Easy {
     }
 
     public static void speak(String text) {
-        ArrayList<String> fileNames = new Arraylist<String>();
+        ArrayList<String> fileNames = new ArrayList<String>();
         
         //Adds filenames to an array so that we can later concat them
+        int count = 0;
         for(String temp: text.split(" ")) {
-            switch(temp.toLowerCase()) {
+            switch(temp.toLowerCase()) { 
                 case "twenty":
                     fileNames.add("twen");
                     fileNames.add("ty");
@@ -70,15 +80,41 @@ public class Easy {
                 case "fifty":
                     fileNames.add("fif");
                     fileNames.add("ty");
+                case "thirteen":
+                    fileNames.add("thir");
+                    fileNames.add("teen");
+                case "fourteen":
+                    fileNames.add("for");
+                    fileNames.add("teen");
+                case "fifteen":
+                    fileNames.add("fif");
+                    fileNames.add("teen");
+                case "sixteen":
+                    fileNames.add("six");
+                    fileNames.add("teen");
+                case "seventeen":
+                    fileNames.add("seven");
+                    fileNames.add("teen");
+                case "eighteen":
+                    fileNames.add("eight");
+                    fileNames.add("teen");
+                case "nineteen":
+                    fileNames.add("nine");
+                    fileNames.add("teen");
+                case "o'clock":
+                    fileNames.add("00");
                 default:
+                    System.out.println("here");
                     fileNames.add(temp);
             }
+            count++;
         }
 
         try {
-            File file = new File("/AttAudrey/");
-            AudioInputStream clip1 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(0) + ".wav"));
-            AudioInputStream clip2 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(1) + ".wav"));
+            //REPLACE FILE DIRECTORY TO FIT YOUR COMPUTER
+            File file = new File("/Users/coffeemate/Documents/VS_Fun/#321/AttAudrey/");
+            AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(0) + ".wav"));
+            AudioInputStream clip2 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(1) + ".wav"));
             
             AudioInputStream multi = 
                             new AudioInputStream(
@@ -87,8 +123,15 @@ public class Easy {
                                 clip1.getFrameLength() + clip2.getFrameLength());
 
             if(fileNames.size() > 2) {
-                for(int i = 0; i < fileNames.size(); i++) {
-                    clip1 = AudioInputStream.getAudioInputStream(new File(file + fileNames.get(i) + ".wav"));
+                for(int i = count; i < fileNames.size(); i++) {
+                    clip1 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(i) + ".wav"));
+                    
+                    AudioInputStream temp = 
+                            new AudioInputStream(
+                                new SequenceInputStream(multi, clip1),
+                                multi.getFormat(),
+                                multi.getFrameLength() + clip2.getFrameLength());
+                    multi = temp;
                 }
             }
             
@@ -97,8 +140,7 @@ public class Easy {
             clip.start();
 
             //Pauses program to let audio play
-            Thread.sleep(500);
-            stream.close();
+            Thread.sleep(9000);
         } catch(Exception e) {
             e.printStackTrace();
         }
