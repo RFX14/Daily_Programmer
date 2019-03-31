@@ -4,11 +4,6 @@ import java.util.*;
 import javax.sound.sampled.*;
 public class Easy {
 
-    //ISSUES:
-    /**
-     * all of the switch cases are not working and just go to default
-     * 8:08 says too much
-     *  */
     public static void main(String[] args) {
         String [] tensPlace = {"twenty ", "thirty ", "forty ", "fifty ", "oh ", "o'clock " };
         String [] onesPlace = {"one ", "two ", "three ", "four ", "five ", "six ",
