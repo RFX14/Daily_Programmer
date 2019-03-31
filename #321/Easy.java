@@ -127,7 +127,7 @@ public class Easy {
 
         try {
             //REPLACE FILE DIRECTORY TO FIT YOUR COMPUTER
-            System.out.println(fileNames);
+            //System.out.println(fileNames);
             File file = new File("/Users/coffeemate/Documents/VS_Fun/#321/AttAudrey/");
             AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(0) + ".wav"));
             AudioInputStream clip2 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(1) + ".wav"));
