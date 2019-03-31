@@ -8,7 +8,7 @@ public class Easy {
     /**
      * all of the switch cases are not working and just go to default
      * 8:08 says too much
-     *  *//
+     *  */
     public static void main(String[] args) {
         String [] tensPlace = {"twenty ", "thirty ", "forty ", "fifty ", "oh ", "o'clock " };
         String [] onesPlace = {"one ", "two ", "three ", "four ", "five ", "six ",
@@ -27,7 +27,7 @@ public class Easy {
             }
             i++;
         }
-
+        time += "Its ";
         //Assigns pm or am
          pm = (hours > 12) ? "pm" : "am";
 
@@ -39,8 +39,12 @@ public class Easy {
         hold = (mins < 10 && mins != 0) ? tensPlace[4] : "";
         time += hold;
 
-        //Gets the Tens place of mins
-        if(mins > 19 && mins < 30) {
+        //Gets general mins
+        if(mins == 0) {
+            time += tensPlace[5];
+        } else if(mins > 0 && mins < 20) {
+            time += onesPlace[mins - 1];
+        } else if(mins > 19 && mins < 30) {
             time += tensPlace[0];
         } else if(mins > 29 && mins < 40) {
             time += tensPlace[1];
@@ -48,16 +52,16 @@ public class Easy {
             time += tensPlace[2];
         } else if(mins > 49 && mins < 60) {
             time +=tensPlace[3];
-        } 
+        }
 
-        if(mins < 20 && mins != 0) {
-            time += onesPlace[mins - 1];
-        } else if(mins == 0) {
-            time += tensPlace[5];
+        //Gets Ones place of number greater than 19
+        int temp = mins % 10;
+        if(mins > 19 && temp != 0) {
+            time += onesPlace[temp - 1];
         }
 
         time += pm;
-        System.out.println("It's " + time);
+        System.out.println(time);
         speak(time);
     }
 
@@ -65,53 +69,65 @@ public class Easy {
         ArrayList<String> fileNames = new ArrayList<String>();
         
         //Adds filenames to an array so that we can later concat them
-        int count = 0;
         for(String temp: text.split(" ")) {
             switch(temp.toLowerCase()) { 
                 case "twenty":
                     fileNames.add("twen");
                     fileNames.add("ty");
+                    break;
                 case "thirty":
                     fileNames.add("thir");
                     fileNames.add("ty");
+                    break;
                 case "forty":
                     fileNames.add("for");
                     fileNames.add("ty");
+                    break;
                 case "fifty":
                     fileNames.add("fif");
                     fileNames.add("ty");
+                    break;
                 case "thirteen":
                     fileNames.add("thir");
                     fileNames.add("teen");
+                    break;
                 case "fourteen":
                     fileNames.add("for");
                     fileNames.add("teen");
+                    break;
                 case "fifteen":
                     fileNames.add("fif");
                     fileNames.add("teen");
+                    break;
                 case "sixteen":
                     fileNames.add("six");
                     fileNames.add("teen");
+                    break;
                 case "seventeen":
                     fileNames.add("seven");
                     fileNames.add("teen");
+                    break;
                 case "eighteen":
                     fileNames.add("eight");
                     fileNames.add("teen");
+                    break;
                 case "nineteen":
                     fileNames.add("nine");
                     fileNames.add("teen");
+                    break;
                 case "o'clock":
                     fileNames.add("00");
+                    break;
                 default:
-                    System.out.println("here");
+                    //System.out.println(temp);
                     fileNames.add(temp);
+                    break;
             }
-            count++;
         }
 
         try {
             //REPLACE FILE DIRECTORY TO FIT YOUR COMPUTER
+            System.out.println(fileNames);
             File file = new File("/Users/coffeemate/Documents/VS_Fun/#321/AttAudrey/");
             AudioInputStream clip1 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(0) + ".wav"));
             AudioInputStream clip2 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(1) + ".wav"));
@@ -123,7 +139,7 @@ public class Easy {
                                 clip1.getFrameLength() + clip2.getFrameLength());
 
             if(fileNames.size() > 2) {
-                for(int i = count; i < fileNames.size(); i++) {
+                for(int i = 2; i < fileNames.size(); i++) {
                     clip1 = AudioSystem.getAudioInputStream(new File(file + "/" + fileNames.get(i) + ".wav"));
                     
                     AudioInputStream temp = 
@@ -139,8 +155,10 @@ public class Easy {
             clip.open(multi);
             clip.start();
 
+            long duraMili = 6000;
+
             //Pauses program to let audio play
-            Thread.sleep(9000);
+            Thread.sleep(duraMili);
         } catch(Exception e) {
             e.printStackTrace();
         }
