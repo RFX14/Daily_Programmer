@@ -1,3 +1,12 @@
+HOW TO RUN:
+*Dont forget to change directory in code so that audio works or else the program may not run*
+In terminal while in the correct directory
+  > javac Easy.java
+  > java Easy 15:03
+
+Replace "15:03" with a 24hr format time
+
+
 https://www.reddit.com/r/dailyprogrammer/comments/6jr76h/20170627_challenge_321_easy_talking_clock/
 
 Description
