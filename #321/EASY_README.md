@@ -1,7 +1,10 @@
 HOW TO RUN:
+
 *Dont forget to change directory in code so that audio works or else the program may not run*
+
 In terminal while in the correct directory
   > javac Easy.java
+  >
   > java Easy 15:03
 
 Replace "15:03" with a 24hr format time
